@@ -1,16 +1,22 @@
 plugins {
-	id 'java'
+	id 'java-library'
 	id 'org.springframework.boot' version '3.4.5'
 	id 'io.spring.dependency-management' version '1.1.7'
+    id 'maven-publish'
 }
 
 group = 'az.neotech.commons'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(21)
 	}
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 configurations {
@@ -19,11 +25,24 @@ configurations {
 	}
 }
 
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+			groupId = "${project.group}"
+            artifactId = 'neotech-commons'
+            version = "${project.version}"
+
+            from components.java
+        }
+    }
+}
+
 repositories {
 	mavenCentral()
 }
 
 dependencies {
+	implementation platform('org.springframework.boot:spring-boot-dependencies:3.4.5')
 	implementation 'org.springframework.boot:spring-boot-starter'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
